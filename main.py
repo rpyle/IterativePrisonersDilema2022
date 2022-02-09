@@ -32,12 +32,14 @@ import random
 import os.path  
 import importlib            
     
-import example0, example1, example2, example3
-import example4, example5
+import example0
+import example1
+import example2
+import example3
+import example4
+import example5
 
-betray = example1
-collude = example0
-
+# Load players
 modules = [example0, example1, example2, example3, example4, example5]
 
 for module in modules:
