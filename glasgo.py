@@ -7,7 +7,7 @@
 ####
 
 team_name = 'Glasgo'
-strategy_name = "Don't be a Snitch"
+strategy_name = "Don't be a Snitch lmao"
 strategy_description = 'Always betray.'
     
 def move(my_history, their_history, my_score, their_score):
