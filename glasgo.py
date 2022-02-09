@@ -7,7 +7,7 @@
 ####
 
 team_name = 'Glasgo'
-strategy_name = "Don't be a Snitch"
+strategy_name = "Disgustingly metagame"
 strategy_description = 'Always never betray.'
     
 def move(my_history, their_history, my_score, their_score):
@@ -21,6 +21,9 @@ def move(my_history, their_history, my_score, their_score):
     Returns 'c' or 'b' for collude or betray.
     '''
     
+		#step one: determine what strategy is being employed
+		#step two: employ the best action against that strategy
+
 
 
 
