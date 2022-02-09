@@ -7,8 +7,8 @@
 ####
 
 team_name = 'baker'
-strategy_name = 'Collude'
-strategy_description = 'dONT BE A SNITCH'
+strategy_name = 'The Wacky Strategy'
+strategy_description = 'It is very w a c k y'
     
 def move(my_history, their_history, my_score, their_score):
     '''Make my move based on the history with this player.
@@ -21,6 +21,6 @@ def move(my_history, their_history, my_score, their_score):
     Returns 'c' or 'b' for collude or betray.
     '''
     
-    # This player always colludes.
-    return 'c'
+    # This player always colludes. 
+    return "c" or "b"
     
