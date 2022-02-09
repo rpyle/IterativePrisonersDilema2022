@@ -7,8 +7,8 @@
 ####
 
 team_name = 'Glasgo'
-strategy_name = "Don't be a Snitch lmao"
-strategy_description = 'Always betray.'
+strategy_name = "Don't be a Snitch"
+strategy_description = 'Always never betray.'
     
 def move(my_history, their_history, my_score, their_score):
     '''Make my move based on the history with this player.
@@ -21,5 +21,8 @@ def move(my_history, their_history, my_score, their_score):
     Returns 'c' or 'b' for collude or betray.
     '''
     
+
+
+
     #This example player always betrays.      
     return 'b'
