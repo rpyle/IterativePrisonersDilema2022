@@ -21,10 +21,12 @@ def move(my_history, their_history, my_score, their_score):
     Returns 'c' or 'b' for collude or betray.
     '''
     
+
 		#step 1: determine what strategy is being employed
 		#step 2: employ the best action against that strategy
 		#step 3: if unable to determine strategy, go tit-for-tat
 		#step 4: if mod 69 is 0, pick random
+
 
 
     #This example player always betrays.      
