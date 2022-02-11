@@ -8,7 +8,7 @@
 
 team_name = 'E1'
 strategy_name = 'Collude'
-strategy_description = 'Always collude.'
+strategy_description = 'Always collude, no snitchy.'
     
 def move(my_history, their_history, my_score, their_score):
     '''Make my move based on the history with this player.
