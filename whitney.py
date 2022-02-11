@@ -6,9 +6,13 @@
 #     move: A function that returns 'c' or 'b'
 ####
 
-team_name = 'E0'
-strategy_name = 'Collude'
-strategy_description = 'Always collude. Snitches get stitches.'
+team_name = 'E5'
+strategy_name = 'Collude 90% unless betrayed within last 10 rounds.'
+strategy_description = '''\
+Check the last 10 moves and betray if I've been betrayed in any of them. Otherwise, collude 90% of the time.
+'''
+
+import random
     
 def move(my_history, their_history, my_score, their_score):
     '''Make my move based on the history with this player.
@@ -20,6 +24,11 @@ def move(my_history, their_history, my_score, their_score):
     
     Returns 'c' or 'b' for collude or betray.
     '''
-    
-    # This player always colludes.
-    return 'c'
+
+    if 'b' in their_history[-3:]: # If the other player has betrayed within last 10 rounds, 
+        return 'b'               # Betray.
+    else:
+        if random.random()<0.50: # 50% of the other rounds
+            return 'b'         # Betray
+        else:
+            return 'c'         # but 50% of the time collude
