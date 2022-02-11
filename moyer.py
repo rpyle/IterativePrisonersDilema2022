@@ -1,4 +1,4 @@
-####
+    ####
 # Each team's file must define four tokens:
 #     team_name: a string
 #     strategy_name: a string
@@ -7,9 +7,11 @@
 ####
 
 team_name = 'moyer'
-strategy_name = 'Collude'
+strategy_name = 'Malice'
 strategy_description = 'Always collude.'
-    
+  
+import random
+
 def move(my_history, their_history, my_score, their_score):
     '''Make my move based on the history with this player.
     
@@ -20,7 +22,9 @@ def move(my_history, their_history, my_score, their_score):
     
     Returns 'c' or 'b' for collude or betray.
     '''
+    if 'b' in their_history[-2:]:
+      return 'b'
+    else:
+      return 'c'
     
-    # This player always colludes.
-    return 'c'
     
