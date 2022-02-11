@@ -22,7 +22,7 @@ def move(my_history, their_history, my_score, their_score):
     
     Returns 'c' or 'b' for collude or betray.
     '''
-    if 'b' in their_history[-2:]:
+    if 'b' in their_history[-20:]:
       return 'b'
     else:
       return 'c'

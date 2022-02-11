@@ -38,9 +38,10 @@ import example2
 import example3
 import example4
 import example5
+import moyer
 
 # Load players
-modules = [example0, example1, example2, example3, example4, example5]
+modules = [example0, example1, example2, example3, example4, example5, moyer]
 
 for module in modules:
     importlib.reload(module)
