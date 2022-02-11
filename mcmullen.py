@@ -23,7 +23,7 @@ def move(my_history, their_history, my_score, their_score):
     if (len(my_history) <= 1): # If it is the 1st or 2nd round
       return "b" # Betray
     else:
-      if (their_history[-1] == "b") and (their_history[-2] == "c"):
-        return "c"
+      if (their_history[-1] == "b") and (their_history[-2] == "c"): # If they colluded and then betrayed me
+        return "c" # Collude with them
       else:
-        return "b"
+        return "b" # Otherwise betray
