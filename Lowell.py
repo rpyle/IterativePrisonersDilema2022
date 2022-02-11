@@ -8,7 +8,7 @@
 
 team_name = 'Chase'
 strategy_name = 'Moral Jesus'
-strategy_description = 'Be like jesus and forgive them. Always collude. If your points drop too low you lose faith in humanity and commit divine retribution and always betray.'
+strategy_description = 'Be like jesus and forgive them. Always collude. If your points drop too low you lose faith in humanity and commit divine retribution and betray. Tracks its recent history to alternate between betray and collude.' 
     
 def move(my_history, their_history, my_score, their_score):
   '''Make my move based on the history with this player.
@@ -22,10 +22,12 @@ def move(my_history, their_history, my_score, their_score):
     '''
     
   # This player always colludes.
-  if len(my_history) == 0:
+  his_track = 1
+  if len(my_history) <= 1:
     return "c"
-  if (my_score >= 0) and (my_history[-1] == "c"):
+  elif (my_score >= 100) and (my_history[-1]+my_history[his_track] == "b"+"b"):
       return "c"
   else:
-    return "c"
+    return "b"
+  his_track = his_track + 1
   
