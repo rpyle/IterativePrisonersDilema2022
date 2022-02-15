@@ -19,32 +19,44 @@ Player 5 (P5): E5, Collude 90% unless betrayed within last 10 rounds.
         Check the last 10 moves and betray if I've been betrayed in any of them.
          Otherwise, collude 90% of the time.
 Player 6 (P6): moyer, Malice
-        Always collude.
+        :)
+Player 7 (P7): moyer, Sacrifice1
+        :)
+Player 8 (P8): moyer, Sacrifice2
+        :)
+Player 9 (P9): moyer, Sacrifice3
+        :)
 --------------------------------------------------------------------------------
 Section 1 - Player vs. Player
 --------------------------------------------------------------------------------
 Each column shows pts/round earned against each other player:
-             P0     P1     P2     P3     P4     P5     P6
-vs. P0 :      0    100     50      0      0     13      0
-vs. P1 :   -500      0   -375   -376   -253   -251   -252
-vs. P2 :   -250    -75      0   -198   -198    -75    -77
-vs. P3 :      0    -73   -198      0      0    -66      0
-vs. P4 :      0   -244   -198      0      0   -244      0
-vs. P5 :    -66   -247   -372   -327   -252      0   -227
-vs. P6 :      0   -246   -368      0      0   -227      0
-TOTAL  :   -816   -787  -1463   -901   -705   -851   -556
+             P0     P1     P2     P3     P4     P5     P6     P7     P8     P9
+vs. P0 :      0    100     49      0      0     10      0     99   -250     95
+vs. P1 :   -500      0   -375   -375   -253   -251   -251   -250   -250   -259
+vs. P2 :   -248    -73      0   -200   -198    -76    -76    -73   -250    -79
+vs. P3 :      0    -73   -196      0      0    -70      0    -73   -250    -77
+vs. P4 :      0   -245   -198      0      0   -226      0   -245   -250   -239
+vs. P5 :    -52   -248   -370   -349   -237      0   -246   -247   -250   -257
+vs. P6 :      0   -247   -370      0      0   -242      0   -247   -250   -256
+vs. P7 :   -496   -250   -376   -375   -252   -252   -252      0   -250   -256
+vs. P8 :   -250   -250   -250   -250   -250   -250   -250   -250      0   -250
+vs. P9 :   -475   -236   -363   -360   -247   -237   -238   -240   -250      0
+TOTAL  :  -2022  -1524  -2452  -1912  -1439  -1595  -1315  -1528  -2250  -1581
 --------------------------------------------------------------------------------
 Section 2 - Leaderboard
 --------------------------------------------------------------------------------
 Average points per round:
 Team name (P#):  Score      with strategy name
-moyer     (P6):        -79 points with Malice                                  
-E4        (P4):       -100 points with Use early history                       
-E1        (P1):       -112 points with Betray                                  
-E0        (P0):       -116 points with Collude                                 
-E5        (P5):       -121 points with Collude 90% unless betrayed within last 
-E3        (P3):       -128 points with Collude but retaliate                   
-E2        (P2):       -209 points with Alternate                               
+moyer     (P6):       -131 points with Malice                                  
+E4        (P4):       -143 points with Use early history                       
+E1        (P1):       -152 points with Betray                                  
+moyer     (P7):       -152 points with Sacrifice1                              
+moyer     (P9):       -158 points with Sacrifice3                              
+E5        (P5):       -159 points with Collude 90% unless betrayed within last 
+E3        (P3):       -191 points with Collude but retaliate                   
+E0        (P0):       -202 points with Collude                                 
+moyer     (P8):       -225 points with Sacrifice2                              
+E2        (P2):       -245 points with Alternate                               
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 example0--------------------------------------------------------------------------------
@@ -250,7 +262,7 @@ def move(my_history, their_history, my_score, their_score):
     
     --------------------------------------------------------------------------------
 moyer--------------------------------------------------------------------------------
-    ####
+####
 # Each team's file must define four tokens:
 #     team_name: a string
 #     strategy_name: a string
@@ -260,33 +272,340 @@ moyer---------------------------------------------------------------------------
 
 team_name = 'moyer'
 strategy_name = 'Malice'
-strategy_description = 'Always collude.'
+strategy_description = ':)'
   
 import random
+round = 0
+state = 0
+lock = 0
 
 def move(my_history, their_history, my_score, their_score):
-    '''Make my move based on the history with this player.
-    
-    history: a string with one letter (c or b) per round that has been played with this opponent.
-    their_history: a string of the same length as history, possibly empty. 
-    The first round between these two players is my_history[0] and their_history[0]
-    The most recent round is my_history[-1] and their_history[-1]
-    
-    Returns 'c' or 'b' for collude or betray.
-    '''
+  global round
+  global state
+  global lock
+  try:
+    if(my_history[round - 1]):
+      pass
+  except IndexError:
+    round = 0
+    lock = 0
+    state = 0
+
+  if (len(my_history) == 0):
+    #state = 0
+    pass
+  elif (their_history[0] == 'b' and lock == 0):
+    lock = 1
+  
+  elif (lock == len(their_history) + 1):
+    if (their_history[1] == 'c'):
+      lock = 2
+    if (their_history[2] == 'b'):
+      lock = 3
+    if (their_history[3] == 'b'):
+      lock = 4
+    if (their_history[4] == 'c'):
+      lock = 5
+    if (their_history[5] == 'c'):
+      lock = 6
+    if (their_history[6] == 'c'):
+      lock = 7
+    if (their_history[7] == 'b'):
+      lock = 8
+    if (their_history[8] == 'c'):
+      lock = 9
+    if ((their_history[9] == 'b') and (state == 0)):
+
+      state = 2
+
+  else:
+   state = 1
+
+  if (round == 0):
+    pass
+  elif (round < 10):
+    print(my_history[round - 1])
+  
+  round = round + 1
+
+  if (state == 1):
     if 'b' in their_history[-20:]:
       return 'b'
     else:
       return 'c'
-    
-    '''if len(my_history) == 0:
+  elif (state == 2):
+    return 'b'
+  elif (state == 0):
+    '''if (len(their_history) == 0):
       return 'c'
-    else:
-      if their_history[-1] == 'b':
-        return 'b'
-      elif their_history[-1] == 'c':
-        return 'c'''
-      --------------------------------------------------------------------------------
+    if (len(their_history) == 1):
+      return 'b'
+    if (len(their_history) == 2):
+      return 'c'
+    if (len(their_history) == 3):
+      return 'c'
+    if (len(their_history) == 4):
+      return 'b'
+    if (len(their_history) == 5):
+      return 'b'
+    if (len(their_history) == 6):
+      return 'b'
+    if (len(their_history) == 7):
+      return 'c'
+    if (len(their_history) == 8):
+      return 'b'
+    if (len(their_history) == 9):
+      return 'c'''
+    if (round == 1):
+      return 'c'
+    if (round == 2):
+      return 'b'
+    if (round == 3):
+      return 'c'
+    if (round == 4):
+      return 'c'
+    if (round == 5):
+      return 'b'
+    if (round == 6):
+      return 'b'
+    if (round == 7):
+      return 'b'
+    if (round == 8):
+      return 'c'
+    if (round == 9):
+      return 'b'
+    if (round == 10):
+      return 'c'
+    
+    --------------------------------------------------------------------------------
+moyertrolling1--------------------------------------------------------------------------------
+####
+# Each team's file must define four tokens:
+#     team_name: a string
+#     strategy_name: a string
+#     strategy_description: a string
+#     move: A function that returns 'c' or 'b'
+####
+
+team_name = 'moyer'
+strategy_name = 'Sacrifice1'
+strategy_description = ':)'
+  
+import random
+state = 0
+lock = 0
+
+def move(my_history, their_history, my_score, their_score):
+  global state
+  global lock
+  if (len(my_history) == 0):
+    pass
+  elif (their_history[0] == 'c' and lock == 0):
+    lock = 1
+  
+  elif (lock == len(their_history) + 1):
+    
+    if (their_history[1] == 'b' or 'c'):
+      lock = 2
+    if (their_history[2] == 'c' or 'b'):
+      lock = 3
+    if (their_history[3] == 'c' or 'b'):
+      lock = 4
+    if (their_history[4] == 'b' or 'c'):
+      lock = 5
+    if (their_history[5] == 'b' or 'c'):
+      lock = 6
+    if (their_history[6] == 'b' or 'c'):
+      lock = 7
+    if (their_history[7] == 'c' or 'b'):
+      lock = 8
+    if (their_history[8] == 'b' or 'c'):
+      lock = 9
+    if ((their_history[9] == 'c' or 'b') and (state == 0)):
+
+      state = 2
+
+  else:
+   state = 1
+
+  if (state == 1):
+    #if 'b' in their_history[-20:]:
+    #  return 'b'
+    #else:
+    #  return 'c'
+    return 'b'
+  elif (state == 2):
+    return 'c'
+  elif (state == 0):
+    if (len(my_history) == 0):
+      return 'b'
+    if (len(my_history) == 1):
+      return 'c'
+    if (len(my_history) == 2):
+      return 'b'
+    if (len(my_history) == 3):
+      return 'b'
+    if (len(my_history) == 4):
+      return 'c'
+    if (len(my_history) == 5):
+      return 'c'
+    if (len(my_history) == 6):
+      return 'c'
+    if (len(my_history) == 7):
+      return 'b'
+    if (len(my_history) == 8):
+      return 'c'
+    if (len(my_history) == 9):
+      return 'b'
+    --------------------------------------------------------------------------------
+moyertrolling2--------------------------------------------------------------------------------
+####
+# Each team's file must define four tokens:
+#     team_name: a string
+#     strategy_name: a string
+#     strategy_description: a string
+#     move: A function that returns 'c' or 'b'
+####
+
+team_name = 'moyer'
+strategy_name = 'Sacrifice2'
+strategy_description = ':)'
+  
+import random
+round = 0
+state = 0
+
+def move(my_history, their_history, my_score, their_score):
+  global round
+  global state
+  try:
+    if(my_history[round - 1]):
+      pass
+  except IndexError:
+    round = 0
+    state = 0
+  
+
+  if (state == 1):
+    #if 'b' in their_history[-20:]:
+    #  return 'b'
+    #else:
+    #  return 'c'
+    return 'b'
+  elif (state == 2):
+    return 'c'
+  elif (state == 0):
+    if (round == 1):
+      return 'b'
+    if (round == 2):
+      return 'c'
+    if (round == 3):
+      return 'b'
+    if (round == 4):
+      return 'b'
+    if (round == 5):
+      return 'c'
+    if (round == 6):
+      return 'c'
+    if (round == 7):
+      return 'c'
+    if (round == 8):
+      return 'b'
+    if (round == 9):
+      return 'c'
+    if (round == 10):
+      return 'b'
+    --------------------------------------------------------------------------------
+moyertrolling3--------------------------------------------------------------------------------
+####
+# Each team's file must define four tokens:
+#     team_name: a string
+#     strategy_name: a string
+#     strategy_description: a string
+#     move: A function that returns 'c' or 'b'
+####
+
+team_name = 'moyer'
+strategy_name = 'Sacrifice3'
+strategy_description = ':)'
+  
+import random
+#state = 0
+#lock = 0
+
+def move(my_history, their_history, my_score, their_score):
+  state = 0
+  '''global lock
+  if (len(my_history) == 0):
+    pass
+  elif ((their_history[0] == 'c') and (lock == 0)):
+    lock = 1
+  
+  elif (lock == len(their_history)):
+    
+    if (their_history[1] == 'b' or 'c'):
+      lock = 2
+    if (their_history[2] == 'c' or 'b'):
+      lock = 3
+    if (their_history[3] == 'c' or 'b'):
+      lock = 4
+    if (their_history[4] == 'b' or 'c'):
+      lock = 5
+    if (their_history[5] == 'b' or 'c'):
+      lock = 6
+    if (their_history[6] == 'b' or 'c'):
+      lock = 7
+    if (their_history[7] == 'c' or 'b'):
+      lock = 8
+    if (their_history[8] == 'b' or 'c'):
+      lock = 9
+    if ((their_history[9] == 'c' or 'b') and (state == 0)):
+      state = 2
+  elif (len(their_history) < 10):
+    pass
+  elif (((their_history[1] == 'b') and (their_history[2] == 'c') and (their_history[3] == 'c') and (their_history[4] == 'b') and (their_history[5] == 'b') and (their_history[6] == 'b') and (their_history[7] == 'c') and (their_history[8] == 'b') and (their_history[9] == 'c') and (lock == 1)) or (their_history[1] == 'c' and their_history[2] == 'b' and their_history[3] == 'b' and their_history[4] == 'c' and their_history[5] == 'c' and their_history[6] == 'c' and their_history[7] == 'b' and their_history[8] == 'c' and their_history[9] == 'b' and lock == 1)):
+    print('yes')
+    state = 2
+  else:
+    state = 1'''
+
+  if(len(my_history) < 10):
+    pass
+  elif (((their_history[0] == 'c') and (their_history[1] == 'b') and (their_history[2] == 'c') and (their_history[3] == 'c') and (their_history[4] == 'b') and (their_history[5] == 'b') and (their_history[6] == 'b') and (their_history[7] == 'c') and (their_history[8] == 'b') and (their_history[9] == 'c')) or (their_history[1] == 'c' and their_history[2] == 'b' and their_history[3] == 'b' and their_history[4] == 'c' and their_history[5] == 'c' and their_history[6] == 'c' and their_history[7] == 'b' and their_history[8] == 'c' and their_history[9] == 'b')):
+    state = 2
+  else:
+    state = 1
+  if (state == 1):
+    #if 'b' in their_history[-20:]:
+    #  return 'b'
+    #else:
+    #  return 'c'
+    return 'b'
+  elif (state == 2):
+    return 'c'
+  elif (state == 0):
+    if (len(my_history) == 0):
+      return 'b'
+    if (len(my_history) == 1):
+      return 'c'
+    if (len(my_history) == 2):
+      return 'b'
+    if (len(my_history) == 3):
+      return 'b'
+    if (len(my_history) == 4):
+      return 'c'
+    if (len(my_history) == 5):
+      return 'c'
+    if (len(my_history) == 6):
+      return 'c'
+    if (len(my_history) == 7):
+      return 'b'
+    if (len(my_history) == 8):
+      return 'c'
+    if (len(my_history) == 9):
+      return 'b'
+  
+    --------------------------------------------------------------------------------
 Section 3 - Game Data for Team E0
 --------------------------------------------------------------------------------
 -500.0 pt/round: E0(P0) "Collude"
@@ -294,17 +613,17 @@ Section 3 - Game Data for Team E0
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
 
-cccccccccccccccccccccccccccccccccccccc
-BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
+ccccccccccccccccccccccccc
+BBBBBBBBBBBBBBBBBBBBBBBBB
 
 --------------------------------------------------------------------------------
--250.0 pt/round: E0(P0) "Collude"
-50.0 pt/round: E2(P2) "Alternate"
+-248.4472049689441 pt/round: E0(P0) "Collude"
+49.68944099378882 pt/round: E2(P2) "Alternate"
 CcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCc
 CBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCB
 
-CcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCc
-CBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCB
+CcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCc
+CBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCB
 
 --------------------------------------------------------------------------------
 0.0 pt/round: E0(P0) "Collude"
@@ -312,8 +631,11 @@ CBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCB
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+
+CCCCCCCCCCC
+CCCCCCCCCCC
 
 --------------------------------------------------------------------------------
 0.0 pt/round: E0(P0) "Collude"
@@ -324,17 +646,20 @@ CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 
-CCCCCCCCCCCCCCCCCCCCCCCC
-CCCCCCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 
 --------------------------------------------------------------------------------
--66.90140845070422 pt/round: E0(P0) "Collude"
-13.380281690140846 pt/round: E5(P5) "Collude 90% unless betrayed within last 10 rounds."
-CCCCcCCCCCCCcCCCCcCCcCCCcCCCCCCCCCCCCCCCCCCCCCCCcCCCCCCCCCCCcCCCCCCCCCCCCCCCCCCC
-CCCCBCCCCCCCBCCCCBCCBCCCBCCCCCCCCCCCCCCCCCCCCCCCBCCCCCCCCCCCBCCCCCCCCCCCCCCCCCCC
+-52.02312138728324 pt/round: E0(P0) "Collude"
+10.404624277456648 pt/round: E5(P5) "Collude 90% unless betrayed within last 10 rounds."
+CCCCcCCCCCCCCCCCCCcCCcCCCCCCcCCCCCCCcCCCCCCCCCCCCCCCCCCCCCCcCcCCCCCCcCCCCCCCCCCc
+CCCCBCCCCCCCCCCCCCBCCBCCCCCCBCCCCCCCBCCCCCCCCCCCCCCCCCCCCCCBCBCCCCCCBCCCCCCCCCCB
 
-CCCCCCCCCcCcccccCCCCCCcCcCCcCCCCCCCCCCcCCCcCCCCCCCCCCCcCCCCCCC
-CCCCCCCCCBCBBBBBCCCCCCBCBCCBCCCCCCCCCCBCCCBCCCCCCCCCCCBCCCCCCC
+CCcCCCcCCCCCCCCCCCCCCCCCCCCCcCCCcCCCCCcCCCCCCCCCCCCCCcCCCcCCCCcCCCCCCCcCCCCCCCCC
+CCBCCCBCCCCCCCCCCCCCCCCCCCCCBCCCBCCCCCBCCCCCCCCCCCCCCBCCCBCCCCBCCCCCCCBCCCCCCCCC
+
+CCCCCCCCCCCCC
+CCCCCCCCCCCCC
 
 --------------------------------------------------------------------------------
 0.0 pt/round: E0(P0) "Collude"
@@ -342,8 +667,35 @@ CCCCCCCCCBCBBBBBCCCCCCBCBCCBCCCCCCCCCCBCCCBCCCCCCCCCCCBCCCCCCC
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+
+--------------------------------------------------------------------------------
+-496.35036496350364 pt/round: E0(P0) "Collude"
+99.27007299270073 pt/round: moyer(P7) "Sacrifice1"
+cCcccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+BCBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
+
+ccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
+
+--------------------------------------------------------------------------------
+-250.0 pt/round: E0(P0) "Collude"
+-250.0 pt/round: moyer(P8) "Sacrifice2"
+cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+                                                                                
+
+ccccccccccccccccccccccccccccccc
+                               
+
+--------------------------------------------------------------------------------
+-475.2475247524753 pt/round: E0(P0) "Collude"
+95.04950495049505 pt/round: moyer(P9) "Sacrifice3"
+cCccCCCcCccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+BCBBCCCBCBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
+
+ccccccccccccccccccccc
+BBBBBBBBBBBBBBBBBBBBB
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -354,113 +706,182 @@ Section 3 - Game Data for Team E1
 BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
-BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
-cccccccccccccccccccccccccccccccccccccc
+BBBBBBBBBBBBBBBBBBBBBBBBB
+ccccccccccccccccccccccccc
 
 --------------------------------------------------------------------------------
--75.0 pt/round: E1(P1) "Betray"
--375.0 pt/round: E2(P2) "Alternate"
+-73.87096774193549 pt/round: E1(P1) "Betray"
+-375.80645161290323 pt/round: E2(P2) "Alternate"
 BbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBb
 cbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcb
 
-BbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBb
-cbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcb
+BbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbB
+cbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbc
 
 --------------------------------------------------------------------------------
--73.30097087378641 pt/round: E1(P1) "Betray"
--376.2135922330097 pt/round: E3(P3) "Collude but retaliate"
+-73.64341085271317 pt/round: E1(P1) "Betray"
+-375.968992248062 pt/round: E3(P3) "Collude but retaliate"
 BbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBb
 cbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcb
 
-BbBbBbBbBbBbBbBbBbBbBbB
-cbcbcbcbcbcbcbcbcbcbcbc
+BbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbB
+cbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbc
 
 --------------------------------------------------------------------------------
--244.53125 pt/round: E1(P1) "Betray"
--253.90625 pt/round: E4(P4) "Use early history"
+-245.13888888888889 pt/round: E1(P1) "Betray"
+-253.47222222222223 pt/round: E4(P4) "Use early history"
 BbBbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 cbcbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 
-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 
 --------------------------------------------------------------------------------
--247.61904761904762 pt/round: E1(P1) "Betray"
--251.70068027210885 pt/round: E5(P5) "Collude 90% unless betrayed within last 10 rounds."
+-248.2233502538071 pt/round: E1(P1) "Betray"
+-251.26903553299493 pt/round: E5(P5) "Collude 90% unless betrayed within last 10 rounds."
 Bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 cbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 
-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 
 --------------------------------------------------------------------------------
--246.8181818181818 pt/round: E1(P1) "Betray"
--252.27272727272728 pt/round: moyer(P6) "Malice"
+-247.3684210526316 pt/round: E1(P1) "Betray"
+-251.8796992481203 pt/round: moyer(P6) "Malice"
 Bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 cbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 
-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+--------------------------------------------------------------------------------
+-250.0 pt/round: E1(P1) "Betray"
+-250.0 pt/round: moyer(P7) "Sacrifice1"
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+bbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbb
+
+--------------------------------------------------------------------------------
+-250.0 pt/round: E1(P1) "Betray"
+-250.0 pt/round: moyer(P8) "Sacrifice2"
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+                                                                                
+
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+                                                                                
+
+bbbbbbbbbbbbbbbbbbbbbbbbb
+                         
+
+--------------------------------------------------------------------------------
+-236.11111111111111 pt/round: E1(P1) "Betray"
+-259.92063492063494 pt/round: moyer(P9) "Sacrifice3"
+bBbbBBBbBbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bcbbcccbcbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 Section 3 - Game Data for Team E2
 --------------------------------------------------------------------------------
-50.0 pt/round: E2(P2) "Alternate"
--250.0 pt/round: E0(P0) "Collude"
+49.68944099378882 pt/round: E2(P2) "Alternate"
+-248.4472049689441 pt/round: E0(P0) "Collude"
 CBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCB
 CcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCc
 
-CBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCB
-CcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCc
+CBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCB
+CcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCc
 
 --------------------------------------------------------------------------------
--375.0 pt/round: E2(P2) "Alternate"
--75.0 pt/round: E1(P1) "Betray"
+-375.80645161290323 pt/round: E2(P2) "Alternate"
+-73.87096774193549 pt/round: E1(P1) "Betray"
 cbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcb
 BbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBb
 
-cbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcb
-BbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBb
+cbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbc
+BbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbB
 
 --------------------------------------------------------------------------------
--198.5185185185185 pt/round: E2(P2) "Alternate"
--198.5185185185185 pt/round: E3(P3) "Collude but retaliate"
+-196.71052631578948 pt/round: E2(P2) "Alternate"
+-200.6578947368421 pt/round: E3(P3) "Collude but retaliate"
 CBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcB
 CcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBc
 
-cBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBc
-BcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcB
+cBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcB
+BcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBc
 
 --------------------------------------------------------------------------------
--198.63945578231292 pt/round: E2(P2) "Alternate"
--198.63945578231292 pt/round: E4(P4) "Use early history"
+-198.05825242718447 pt/round: E2(P2) "Alternate"
+-198.05825242718447 pt/round: E4(P4) "Use early history"
 CBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcB
 CcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBc
 
-cBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBc
-BcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcB
+cBcBcBcBcBcBcBcBcBcBcBc
+BcBcBcBcBcBcBcBcBcBcBcB
 
 --------------------------------------------------------------------------------
--372.25274725274727 pt/round: E2(P2) "Alternate"
--75.54945054945055 pt/round: E5(P5) "Collude 90% unless betrayed within last 10 rounds."
-Cbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcb
-CbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBb
-
-cbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcb
-BbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBb
-
-cbcbcbcbcbcbcbcbcbcbcb
-BbBbBbBbBbBbBbBbBbBbBb
-
---------------------------------------------------------------------------------
--368.65671641791045 pt/round: E2(P2) "Alternate"
--77.61194029850746 pt/round: moyer(P6) "Malice"
+-370.85714285714283 pt/round: E2(P2) "Alternate"
+-76.0 pt/round: E5(P5) "Collude 90% unless betrayed within last 10 rounds."
 CBcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcb
 CcBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBb
 
-cbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcb
-BbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBb
+cbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcb
+BbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBb
+
+cbcbcbcbcbcbcbc
+BbBbBbBbBbBbBbB
+
+--------------------------------------------------------------------------------
+-370.38216560509557 pt/round: E2(P2) "Alternate"
+-76.11464968152866 pt/round: moyer(P6) "Malice"
+CBcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcb
+CcBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBb
+
+cbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbc
+BbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbB
+
+--------------------------------------------------------------------------------
+-376.0 pt/round: E2(P2) "Alternate"
+-73.6 pt/round: moyer(P7) "Sacrifice1"
+cbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcb
+BbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBb
+
+cbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbc
+BbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbB
+
+--------------------------------------------------------------------------------
+-250.0 pt/round: E2(P2) "Alternate"
+-250.0 pt/round: moyer(P8) "Sacrifice2"
+cbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcb
+                                                                                
+
+cbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcb
+                                                                                
+
+cbcbcbcbcbcbcbcbcbcbcbcbc
+                         
+
+--------------------------------------------------------------------------------
+-363.8888888888889 pt/round: E2(P2) "Alternate"
+-79.04040404040404 pt/round: moyer(P9) "Sacrifice3"
+cBcbCBCbCbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcb
+BcBbCcCbCbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBb
+
+cbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcb
+BbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBb
+
+cbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcb
+BbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBb
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -471,26 +892,29 @@ Section 3 - Game Data for Team E3
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+
+CCCCCCCCCCC
+CCCCCCCCCCC
 
 --------------------------------------------------------------------------------
--376.2135922330097 pt/round: E3(P3) "Collude but retaliate"
--73.30097087378641 pt/round: E1(P1) "Betray"
+-375.968992248062 pt/round: E3(P3) "Collude but retaliate"
+-73.64341085271317 pt/round: E1(P1) "Betray"
 cbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcb
 BbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBb
 
-cbcbcbcbcbcbcbcbcbcbcbc
-BbBbBbBbBbBbBbBbBbBbBbB
+cbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbc
+BbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbB
 
 --------------------------------------------------------------------------------
--198.5185185185185 pt/round: E3(P3) "Collude but retaliate"
--198.5185185185185 pt/round: E2(P2) "Alternate"
+-200.6578947368421 pt/round: E3(P3) "Collude but retaliate"
+-196.71052631578948 pt/round: E2(P2) "Alternate"
 CcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBc
 CBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcB
 
-BcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcB
-cBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBc
+BcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBc
+cBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcB
 
 --------------------------------------------------------------------------------
 0.0 pt/round: E3(P3) "Collude but retaliate"
@@ -498,20 +922,20 @@ cBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBc
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-
-CCCCC
-CCCCC
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 
 --------------------------------------------------------------------------------
--327.04918032786884 pt/round: E3(P3) "Collude but retaliate"
--66.39344262295081 pt/round: E5(P5) "Collude 90% unless betrayed within last 10 rounds."
-CCCCCCCCCCCCCCCcBcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbc
-CCCCCCCCCCCCCCCBcBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbB
+-349.24242424242425 pt/round: E3(P3) "Collude but retaliate"
+-70.45454545454545 pt/round: E5(P5) "Collude 90% unless betrayed within last 10 rounds."
+CCCCCCCCCCCCCcBcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbc
+CCCCCCCCCCCCCBcBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbB
 
-bcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbc
-bBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbB
+bcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbc
+bBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbB
+
+bcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbc
+bBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbB
 
 --------------------------------------------------------------------------------
 0.0 pt/round: E3(P3) "Collude but retaliate"
@@ -522,8 +946,35 @@ CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+
+--------------------------------------------------------------------------------
+-375.98425196850394 pt/round: E3(P3) "Collude but retaliate"
+-73.62204724409449 pt/round: moyer(P7) "Sacrifice1"
+cbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcb
+BbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBb
+
+cbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbc
+BbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbB
+
+--------------------------------------------------------------------------------
+-250.0 pt/round: E3(P3) "Collude but retaliate"
+-250.0 pt/round: moyer(P8) "Sacrifice2"
+cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+                                                                                
+
+ccccccccccccccccccccccccccccccccccccccccccccccc
+                                               
+
+--------------------------------------------------------------------------------
+-360.1626016260163 pt/round: E3(P3) "Collude but retaliate"
+-77.23577235772358 pt/round: moyer(P9) "Sacrifice3"
+cBcbCCCcBcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbc
+BcBbCCCBcBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbB
+
+bcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcb
+bBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBb
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -537,26 +988,26 @@ CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 
-CCCCCCCCCCCCCCCCCCCCCCCC
-CCCCCCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 
 --------------------------------------------------------------------------------
--253.90625 pt/round: E4(P4) "Use early history"
--244.53125 pt/round: E1(P1) "Betray"
+-253.47222222222223 pt/round: E4(P4) "Use early history"
+-245.13888888888889 pt/round: E1(P1) "Betray"
 cbcbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 BbBbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 
-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 
 --------------------------------------------------------------------------------
--198.63945578231292 pt/round: E4(P4) "Use early history"
--198.63945578231292 pt/round: E2(P2) "Alternate"
+-198.05825242718447 pt/round: E4(P4) "Use early history"
+-198.05825242718447 pt/round: E2(P2) "Alternate"
 CcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBc
 CBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcB
 
-BcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcB
-cBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBc
+BcBcBcBcBcBcBcBcBcBcBcB
+cBcBcBcBcBcBcBcBcBcBcBc
 
 --------------------------------------------------------------------------------
 0.0 pt/round: E4(P4) "Use early history"
@@ -564,20 +1015,17 @@ cBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBc
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-
-CCCCC
-CCCCC
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 
 --------------------------------------------------------------------------------
--252.64900662251657 pt/round: E4(P4) "Use early history"
--244.7019867549669 pt/round: E5(P5) "Collude 90% unless betrayed within last 10 rounds."
-cBcbcbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-BcBbBbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+-237.5 pt/round: E4(P4) "Use early history"
+-226.38888888888889 pt/round: E5(P5) "Collude 90% unless betrayed within last 10 rounds."
+CCCCCCCcBcbcbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+CCCCCCCBcBbBbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 
-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbb
 
 --------------------------------------------------------------------------------
 0.0 pt/round: E4(P4) "Use early history"
@@ -585,68 +1033,140 @@ bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+
+--------------------------------------------------------------------------------
+-252.99401197604791 pt/round: E4(P4) "Use early history"
+-245.80838323353294 pt/round: moyer(P7) "Sacrifice1"
+cbcbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+BbBbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+bbbbbbb
+bbbbbbb
+
+--------------------------------------------------------------------------------
+-250.0 pt/round: E4(P4) "Use early history"
+-250.0 pt/round: moyer(P8) "Sacrifice2"
+cc c                                                                            
+                                                                                
+
+                                                                                
+                                                                                
+
+                         
+                         
+
+--------------------------------------------------------------------------------
+-247.0 pt/round: E4(P4) "Use early history"
+-239.0 pt/round: moyer(P9) "Sacrifice3"
+cBcbCCCcBcbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+BcBbCCCBcBbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 Section 3 - Game Data for Team E5
 --------------------------------------------------------------------------------
-13.380281690140846 pt/round: E5(P5) "Collude 90% unless betrayed within last 10 rounds."
--66.90140845070422 pt/round: E0(P0) "Collude"
-CCCCBCCCCCCCBCCCCBCCBCCCBCCCCCCCCCCCCCCCCCCCCCCCBCCCCCCCCCCCBCCCCCCCCCCCCCCCCCCC
-CCCCcCCCCCCCcCCCCcCCcCCCcCCCCCCCCCCCCCCCCCCCCCCCcCCCCCCCCCCCcCCCCCCCCCCCCCCCCCCC
+10.404624277456648 pt/round: E5(P5) "Collude 90% unless betrayed within last 10 rounds."
+-52.02312138728324 pt/round: E0(P0) "Collude"
+CCCCBCCCCCCCCCCCCCBCCBCCCCCCBCCCCCCCBCCCCCCCCCCCCCCCCCCCCCCBCBCCCCCCBCCCCCCCCCCB
+CCCCcCCCCCCCCCCCCCcCCcCCCCCCcCCCCCCCcCCCCCCCCCCCCCCCCCCCCCCcCcCCCCCCcCCCCCCCCCCc
 
-CCCCCCCCCBCBBBBBCCCCCCBCBCCBCCCCCCCCCCBCCCBCCCCCCCCCCCBCCCCCCC
-CCCCCCCCCcCcccccCCCCCCcCcCCcCCCCCCCCCCcCCCcCCCCCCCCCCCcCCCCCCC
+CCBCCCBCCCCCCCCCCCCCCCCCCCCCBCCCBCCCCCBCCCCCCCCCCCCCCBCCCBCCCCBCCCCCCCBCCCCCCCCC
+CCcCCCcCCCCCCCCCCCCCCCCCCCCCcCCCcCCCCCcCCCCCCCCCCCCCCcCCCcCCCCcCCCCCCCcCCCCCCCCC
+
+CCCCCCCCCCCCC
+CCCCCCCCCCCCC
 
 --------------------------------------------------------------------------------
--251.70068027210885 pt/round: E5(P5) "Collude 90% unless betrayed within last 10 rounds."
--247.61904761904762 pt/round: E1(P1) "Betray"
+-251.26903553299493 pt/round: E5(P5) "Collude 90% unless betrayed within last 10 rounds."
+-248.2233502538071 pt/round: E1(P1) "Betray"
 cbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 Bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 
-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 
 --------------------------------------------------------------------------------
--75.54945054945055 pt/round: E5(P5) "Collude 90% unless betrayed within last 10 rounds."
--372.25274725274727 pt/round: E2(P2) "Alternate"
-CbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBb
-Cbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcb
+-76.0 pt/round: E5(P5) "Collude 90% unless betrayed within last 10 rounds."
+-370.85714285714283 pt/round: E2(P2) "Alternate"
+CcBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBb
+CBcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcb
 
 BbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBb
 cbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcb
 
-BbBbBbBbBbBbBbBbBbBbBb
-cbcbcbcbcbcbcbcbcbcbcb
+BbBbBbBbBbBbBbB
+cbcbcbcbcbcbcbc
 
 --------------------------------------------------------------------------------
--66.39344262295081 pt/round: E5(P5) "Collude 90% unless betrayed within last 10 rounds."
--327.04918032786884 pt/round: E3(P3) "Collude but retaliate"
-CCCCCCCCCCCCCCCBcBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbB
-CCCCCCCCCCCCCCCcBcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbc
+-70.45454545454545 pt/round: E5(P5) "Collude 90% unless betrayed within last 10 rounds."
+-349.24242424242425 pt/round: E3(P3) "Collude but retaliate"
+CCCCCCCCCCCCCBcBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbB
+CCCCCCCCCCCCCcBcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbc
 
-bBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbB
-bcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbc
+bBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbB
+bcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbc
 
---------------------------------------------------------------------------------
--244.7019867549669 pt/round: E5(P5) "Collude 90% unless betrayed within last 10 rounds."
--252.64900662251657 pt/round: E4(P4) "Use early history"
-BcBbBbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-cBcbcbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-
-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbB
+bcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbc
 
 --------------------------------------------------------------------------------
--227.01612903225808 pt/round: E5(P5) "Collude 90% unless betrayed within last 10 rounds."
--227.01612903225808 pt/round: moyer(P6) "Malice"
-CCCCCCCCCCCBcbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-CCCCCCCCCCCcBbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+-226.38888888888889 pt/round: E5(P5) "Collude 90% unless betrayed within last 10 rounds."
+-237.5 pt/round: E4(P4) "Use early history"
+CCCCCCCBcBbBbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+CCCCCCCcBcbcbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 
-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+--------------------------------------------------------------------------------
+-242.46575342465752 pt/round: E5(P5) "Collude 90% unless betrayed within last 10 rounds."
+-246.57534246575344 pt/round: moyer(P6) "Malice"
+CCCBbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+CCCcbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+--------------------------------------------------------------------------------
+-252.10084033613447 pt/round: E5(P5) "Collude 90% unless betrayed within last 10 rounds."
+-247.05882352941177 pt/round: moyer(P7) "Sacrifice1"
+cbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+Bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+--------------------------------------------------------------------------------
+-250.0 pt/round: E5(P5) "Collude 90% unless betrayed within last 10 rounds."
+-250.0 pt/round: moyer(P8) "Sacrifice2"
+cccccccccccccccccccccbccccccccbcccbccbcbccccccccccbcbccbcccccccccccccccccccbcccc
+                                                                                
+
+cccccccccccccccccccccccccbccccccccccccbcbccccccccccccbcccccccccccccccccccccccccc
+                                                                                
+
+ccccccccccbc
+            
+
+--------------------------------------------------------------------------------
+-237.06896551724137 pt/round: E5(P5) "Collude 90% unless betrayed within last 10 rounds."
+-257.7586206896552 pt/round: moyer(P9) "Sacrifice3"
+cBbbBBBbBbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+Bcbbcccbcbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -657,26 +1177,26 @@ Section 3 - Game Data for Team moyer
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 
 --------------------------------------------------------------------------------
--252.27272727272728 pt/round: moyer(P6) "Malice"
--246.8181818181818 pt/round: E1(P1) "Betray"
+-251.8796992481203 pt/round: moyer(P6) "Malice"
+-247.3684210526316 pt/round: E1(P1) "Betray"
 cbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 Bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 
-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 
 --------------------------------------------------------------------------------
--77.61194029850746 pt/round: moyer(P6) "Malice"
--368.65671641791045 pt/round: E2(P2) "Alternate"
+-76.11464968152866 pt/round: moyer(P6) "Malice"
+-370.38216560509557 pt/round: E2(P2) "Alternate"
 CcBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBb
 CBcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcb
 
-BbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBb
-cbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcb
+BbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbB
+cbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbc
 
 --------------------------------------------------------------------------------
 0.0 pt/round: moyer(P6) "Malice"
@@ -687,8 +1207,8 @@ CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 
 --------------------------------------------------------------------------------
 0.0 pt/round: moyer(P6) "Malice"
@@ -696,16 +1216,334 @@ CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 
 --------------------------------------------------------------------------------
--227.01612903225808 pt/round: moyer(P6) "Malice"
--227.01612903225808 pt/round: E5(P5) "Collude 90% unless betrayed within last 10 rounds."
-CCCCCCCCCCCcBbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-CCCCCCCCCCCBcbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+-246.57534246575344 pt/round: moyer(P6) "Malice"
+-242.46575342465752 pt/round: E5(P5) "Collude 90% unless betrayed within last 10 rounds."
+CCCcbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+CCCBbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 
-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+--------------------------------------------------------------------------------
+-252.13675213675214 pt/round: moyer(P6) "Malice"
+-247.008547008547 pt/round: moyer(P7) "Sacrifice1"
+cbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+Bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+--------------------------------------------------------------------------------
+-250.0 pt/round: moyer(P6) "Malice"
+-250.0 pt/round: moyer(P8) "Sacrifice2"
+cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+                                                                                
+
+cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+                                                                                
+
+ccccccccccccccccccccccc
+                       
+
+--------------------------------------------------------------------------------
+-238.97058823529412 pt/round: moyer(P6) "Malice"
+-256.61764705882354 pt/round: moyer(P9) "Sacrifice3"
+cBbbBBBbBbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+Bcbbcccbcbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+Section 3 - Game Data for Team moyer
+--------------------------------------------------------------------------------
+99.27007299270073 pt/round: moyer(P7) "Sacrifice1"
+-496.35036496350364 pt/round: E0(P0) "Collude"
+BCBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
+cCcccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+
+BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
+ccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+
+--------------------------------------------------------------------------------
+-250.0 pt/round: moyer(P7) "Sacrifice1"
+-250.0 pt/round: E1(P1) "Betray"
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+bbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbb
+
+--------------------------------------------------------------------------------
+-73.6 pt/round: moyer(P7) "Sacrifice1"
+-376.0 pt/round: E2(P2) "Alternate"
+BbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBb
+cbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcb
+
+BbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbB
+cbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbc
+
+--------------------------------------------------------------------------------
+-73.62204724409449 pt/round: moyer(P7) "Sacrifice1"
+-375.98425196850394 pt/round: E3(P3) "Collude but retaliate"
+BbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBb
+cbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcb
+
+BbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbB
+cbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbc
+
+--------------------------------------------------------------------------------
+-245.80838323353294 pt/round: moyer(P7) "Sacrifice1"
+-252.99401197604791 pt/round: E4(P4) "Use early history"
+BbBbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+cbcbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+bbbbbbb
+bbbbbbb
+
+--------------------------------------------------------------------------------
+-247.05882352941177 pt/round: moyer(P7) "Sacrifice1"
+-252.10084033613447 pt/round: E5(P5) "Collude 90% unless betrayed within last 10 rounds."
+Bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+cbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+--------------------------------------------------------------------------------
+-247.008547008547 pt/round: moyer(P7) "Sacrifice1"
+-252.13675213675214 pt/round: moyer(P6) "Malice"
+Bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+cbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+--------------------------------------------------------------------------------
+-250.0 pt/round: moyer(P7) "Sacrifice1"
+-250.0 pt/round: moyer(P8) "Sacrifice2"
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+                                                                                
+
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+                                                                                
+
+bbbbbbbbbbbbbbbbbbbbbbbbb
+                         
+
+--------------------------------------------------------------------------------
+-240.43715846994536 pt/round: moyer(P7) "Sacrifice1"
+-256.8306010928962 pt/round: moyer(P9) "Sacrifice3"
+bBbbBBBbBbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bcbbcccbcbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+bbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbb
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+Section 3 - Game Data for Team moyer
+--------------------------------------------------------------------------------
+-250.0 pt/round: moyer(P8) "Sacrifice2"
+-250.0 pt/round: E0(P0) "Collude"
+                                                                                
+cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+
+                               
+ccccccccccccccccccccccccccccccc
+
+--------------------------------------------------------------------------------
+-250.0 pt/round: moyer(P8) "Sacrifice2"
+-250.0 pt/round: E1(P1) "Betray"
+                                                                                
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+                                                                                
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+                         
+bbbbbbbbbbbbbbbbbbbbbbbbb
+
+--------------------------------------------------------------------------------
+-250.0 pt/round: moyer(P8) "Sacrifice2"
+-250.0 pt/round: E2(P2) "Alternate"
+                                                                                
+cbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcb
+
+                                                                                
+cbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcb
+
+                         
+cbcbcbcbcbcbcbcbcbcbcbcbc
+
+--------------------------------------------------------------------------------
+-250.0 pt/round: moyer(P8) "Sacrifice2"
+-250.0 pt/round: E3(P3) "Collude but retaliate"
+                                                                                
+cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+
+                                               
+ccccccccccccccccccccccccccccccccccccccccccccccc
+
+--------------------------------------------------------------------------------
+-250.0 pt/round: moyer(P8) "Sacrifice2"
+-250.0 pt/round: E4(P4) "Use early history"
+                                                                                
+cc c                                                                            
+
+                                                                                
+                                                                                
+
+                         
+                         
+
+--------------------------------------------------------------------------------
+-250.0 pt/round: moyer(P8) "Sacrifice2"
+-250.0 pt/round: E5(P5) "Collude 90% unless betrayed within last 10 rounds."
+                                                                                
+cccccccccccccccccccccbccccccccbcccbccbcbccccccccccbcbccbcccccccccccccccccccbcccc
+
+                                                                                
+cccccccccccccccccccccccccbccccccccccccbcbccccccccccccbcccccccccccccccccccccccccc
+
+            
+ccccccccccbc
+
+--------------------------------------------------------------------------------
+-250.0 pt/round: moyer(P8) "Sacrifice2"
+-250.0 pt/round: moyer(P6) "Malice"
+                                                                                
+cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+
+                                                                                
+cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+
+                       
+ccccccccccccccccccccccc
+
+--------------------------------------------------------------------------------
+-250.0 pt/round: moyer(P8) "Sacrifice2"
+-250.0 pt/round: moyer(P7) "Sacrifice1"
+                                                                                
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+                                                                                
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+                         
+bbbbbbbbbbbbbbbbbbbbbbbbb
+
+--------------------------------------------------------------------------------
+-250.0 pt/round: moyer(P8) "Sacrifice2"
+-250.0 pt/round: moyer(P9) "Sacrifice3"
+                                                                                
+bcbbcccbcbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+                                                                               
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+Section 3 - Game Data for Team moyer
+--------------------------------------------------------------------------------
+95.04950495049505 pt/round: moyer(P9) "Sacrifice3"
+-475.2475247524753 pt/round: E0(P0) "Collude"
+BCBBCCCBCBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
+cCccCCCcCccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+
+BBBBBBBBBBBBBBBBBBBBB
+ccccccccccccccccccccc
+
+--------------------------------------------------------------------------------
+-259.92063492063494 pt/round: moyer(P9) "Sacrifice3"
+-236.11111111111111 pt/round: E1(P1) "Betray"
+bcbbcccbcbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bBbbBBBbBbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+--------------------------------------------------------------------------------
+-79.04040404040404 pt/round: moyer(P9) "Sacrifice3"
+-363.8888888888889 pt/round: E2(P2) "Alternate"
+BcBbCcCbCbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBb
+cBcbCBCbCbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcb
+
+BbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBb
+cbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcb
+
+BbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBb
+cbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcb
+
+--------------------------------------------------------------------------------
+-77.23577235772358 pt/round: moyer(P9) "Sacrifice3"
+-360.1626016260163 pt/round: E3(P3) "Collude but retaliate"
+BcBbCCCBcBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbB
+cBcbCCCcBcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbc
+
+bBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBb
+bcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcb
+
+--------------------------------------------------------------------------------
+-239.0 pt/round: moyer(P9) "Sacrifice3"
+-247.0 pt/round: E4(P4) "Use early history"
+BcBbCCCBcBbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+cBcbCCCcBcbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+--------------------------------------------------------------------------------
+-257.7586206896552 pt/round: moyer(P9) "Sacrifice3"
+-237.06896551724137 pt/round: E5(P5) "Collude 90% unless betrayed within last 10 rounds."
+Bcbbcccbcbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+cBbbBBBbBbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+--------------------------------------------------------------------------------
+-256.61764705882354 pt/round: moyer(P9) "Sacrifice3"
+-238.97058823529412 pt/round: moyer(P6) "Malice"
+Bcbbcccbcbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+cBbbBBBbBbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+--------------------------------------------------------------------------------
+-256.8306010928962 pt/round: moyer(P9) "Sacrifice3"
+-240.43715846994536 pt/round: moyer(P7) "Sacrifice1"
+bcbbcccbcbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bBbbBBBbBbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+bbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbb
+
+--------------------------------------------------------------------------------
+-250.0 pt/round: moyer(P9) "Sacrifice3"
+-250.0 pt/round: moyer(P8) "Sacrifice2"
+bcbbcccbcbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+                                                                                
+
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+                                                                               
 
 --------------------------------------------------------------------------------
