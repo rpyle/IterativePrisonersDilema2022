@@ -21,31 +21,35 @@ Player 5 (P5): E5, Collude 90% unless betrayed within last 10 rounds.
 Player 6 (P6): Zacharie, Betray then Collude
         Betray in first round. If opponent betrays, next round collude. Otherwis
         e betray.
+Player 7 (P7): Rogers, Discriminating Altruism
+        Collude with everyone except those who have betrayed me in the past.
 --------------------------------------------------------------------------------
 Section 1 - Player vs. Player
 --------------------------------------------------------------------------------
 Each column shows pts/round earned against each other player:
-             P0     P1     P2     P3     P4     P5     P6
-vs. P0 :      0    100     50      0      0      8    100
-vs. P1 :   -500      0   -375   -376   -254   -252   -250
-vs. P2 :   -250    -73      0   -198   -198    -76   -124
-vs. P3 :      0    -73   -198      0      0    -73    -50
-vs. P4 :      0   -244   -198      0      0   -243   -211
-vs. P5 :    -40   -246   -369   -364   -253      0   -249
-vs. P6 :   -500   -250   -127   -251   -219   -249      0
-TOTAL  :  -1290   -788  -1220  -1190   -925   -887   -786
+             P0     P1     P2     P3     P4     P5     P6     P7
+vs. P0 :      0    100     50      0      0     10    100      0
+vs. P1 :   -500      0   -375   -375   -253   -251   -250   -253
+vs. P2 :   -250    -73      0   -200   -200    -76   -123   -247
+vs. P3 :      0    -73   -197      0      0    -76    -50     -2
+vs. P4 :      0   -245   -197      0      0   -245   -213     -2
+vs. P5 :    -51   -247   -370   -373   -252      0   -249    -73
+vs. P6 :   -500   -250   -128   -251   -217   -249      0   -251
+vs. P7 :     -3   -245     47     -2     -2     12   -246      0
+TOTAL  :  -1305  -1036  -1170  -1203   -925   -877  -1032   -829
 --------------------------------------------------------------------------------
 Section 2 - Leaderboard
 --------------------------------------------------------------------------------
 Average points per round:
 Team name (P#):  Score      with strategy name
-E1        (P1):       -112 points with Betray                                  
-Zacharie  (P6):       -112 points with Betray then Collude                     
-E5        (P5):       -126 points with Collude 90% unless betrayed within last 
-E4        (P4):       -132 points with Use early history                       
-E3        (P3):       -170 points with Collude but retaliate                   
-E2        (P2):       -174 points with Alternate                               
-E0        (P0):       -184 points with Collude                                 
+Rogers    (P7):       -103 points with Discriminating Altruism                 
+E5        (P5):       -109 points with Collude 90% unless betrayed within last 
+E4        (P4):       -115 points with Use early history                       
+E1        (P1):       -129 points with Betray                                  
+Zacharie  (P6):       -129 points with Betray then Collude                     
+E2        (P2):       -146 points with Alternate                               
+E3        (P3):       -150 points with Collude but retaliate                   
+E0        (P0):       -163 points with Collude                                 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 example0--------------------------------------------------------------------------------
@@ -280,6 +284,53 @@ def move(my_history, their_history, my_score, their_score):
         return "c" # Collude with them
       else:
         return "b" # Otherwise betray--------------------------------------------------------------------------------
+rogers--------------------------------------------------------------------------------
+####
+# Each team's file must define four tokens:
+#     team_name: a string
+#     strategy_name: a string
+#     strategy_description: a string
+#     move: A function that returns 'c' or 'b'
+####
+
+team_name = 'Rogers'
+strategy_name = 'Discriminating Altruism'
+strategy_description = 'Collude with everyone except those who have betrayed me in the past.'
+    
+def move(my_history, their_history, my_score, their_score):
+    '''Make my move based on the history with this player.
+    
+    history: a string with one letter (c or b) per round that has been played with this opponent.
+    their_history: a string of the same length as history, possibly empty. 
+    The first round between these two players is my_history[0] and their_history[0]
+    The most recent round is my_history[-1] and their_history[-1]
+    
+    Returns 'c' or 'b' for collude or betray.
+    '''
+    if len(my_history)==0: # It's the first round: collude
+        return 'c'
+    else:
+        # If in the last round they betrayed me, betray them
+      
+        
+        # Reference last round
+        recent_round_them = their_history[-1]
+        recent_round_me = my_history[-1]
+                    
+        # Look at rounds before that one
+        for round in range(len(my_history)-1):
+            prior_round_them = their_history[round]
+            prior_round_me = my_history[round]
+            # If one matches
+            if (prior_round_me >= recent_round_me) and \
+                    (prior_round_them >= recent_round_them):
+                return their_history[round]
+        # No match found
+        if my_history[-1]=='c' and their_history[-1]=='b':
+            return 'c' # Betray if they were severely punished last time
+        else:
+            return 'b' # Otherwise collude.
+    --------------------------------------------------------------------------------
 Section 3 - Game Data for Team E0
 --------------------------------------------------------------------------------
 -500.0 pt/round: E0(P0) "Collude"
@@ -287,11 +338,8 @@ Section 3 - Game Data for Team E0
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
 
-cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
-
-cccccccccccccccccccccccccccccccccccccccc
-BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
+cccccccccccccccccccccccccccccccccccc
+BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
 
 --------------------------------------------------------------------------------
 -250.0 pt/round: E0(P0) "Collude"
@@ -299,8 +347,11 @@ BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
 CcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCc
 CBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCB
 
-CcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCc
-CBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCB
+CcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCc
+CBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCB
+
+CcCcCcCc
+CBCBCBCB
 
 --------------------------------------------------------------------------------
 0.0 pt/round: E0(P0) "Collude"
@@ -308,8 +359,8 @@ CBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCB
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 
 --------------------------------------------------------------------------------
 0.0 pt/round: E0(P0) "Collude"
@@ -317,17 +368,23 @@ CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 
 --------------------------------------------------------------------------------
--40.14598540145985 pt/round: E0(P0) "Collude"
-8.02919708029197 pt/round: E5(P5) "Collude 90% unless betrayed within last 10 rounds."
-CcCCcCCCccCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCcCCCcCcCCcCCCcCCCCCCCCCCCCCCCCCCCCC
-CBCCBCCCBBCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCBCCCBCBCCBCCCBCCCCCCCCCCCCCCCCCCCCC
+-51.724137931034484 pt/round: E0(P0) "Collude"
+10.344827586206897 pt/round: E5(P5) "Collude 90% unless betrayed within last 10 rounds."
+cCCCCCCCCCCCCCCCCCCCcCCCCCCCcCcCCCCCcCCCCCCCCCCCCCCCcCCCCCCCcCCCCccCCCcCCCCCCCCC
+BCCCCCCCCCCCCCCCCCCCBCCCCCCCBCBCCCCCBCCCCCCCCCCCCCCCBCCCCCCCBCCCCBBCCCBCCCCCCCCC
 
-CCCCcCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCcCCCCCCCCCCCCCCCCCCCCC
-CCCCBCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCBCCCCCCCCCCCCCCCCCCCCC
+CcCCCCCCCcCCcCCCCCCcCCCCCCCCCCCCCCccCCCCCCCCCCCCCCCCCCCCCCCCCCCCCcCCCCCCCCCCCCCC
+CBCCCCCCCBCCBCCCCCCBCCCCCCCCCCCCCCBBCCCCCCCCCCCCCCCCCCCCCCCCCCCCCBCCCCCCCCCCCCCC
+
+CCCCCCCCcCCCCC
+CCCCCCCCBCCCCC
 
 --------------------------------------------------------------------------------
 -500.0 pt/round: E0(P0) "Collude"
@@ -335,8 +392,20 @@ CCCCBCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCBCCCCCCCCCCCCCCCCCCCCC
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
 
-cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
+cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
+
+cccccccccccccccccccccccccccccccccccccc
+BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
+
+--------------------------------------------------------------------------------
+-3.597122302158273 pt/round: E0(P0) "Collude"
+0.7194244604316546 pt/round: Rogers(P7) "Discriminating Altruism"
+CcCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+CBCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -347,47 +416,50 @@ Section 3 - Game Data for Team E1
 BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
-BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
-cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-
-BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
-cccccccccccccccccccccccccccccccccccccccc
+BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
+cccccccccccccccccccccccccccccccccccc
 
 --------------------------------------------------------------------------------
--73.91304347826087 pt/round: E1(P1) "Betray"
--375.77639751552795 pt/round: E2(P2) "Alternate"
+-73.70370370370371 pt/round: E1(P1) "Betray"
+-375.9259259259259 pt/round: E2(P2) "Alternate"
+BbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBb
+cbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcb
+
+BbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbB
+cbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbc
+
+--------------------------------------------------------------------------------
+-73.96449704142012 pt/round: E1(P1) "Betray"
+-375.7396449704142 pt/round: E3(P3) "Collude but retaliate"
 BbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBb
 cbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcb
 
 BbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBb
 cbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcb
 
---------------------------------------------------------------------------------
--73.33333333333333 pt/round: E1(P1) "Betray"
--376.1904761904762 pt/round: E3(P3) "Collude but retaliate"
-BbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBb
-cbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcb
-
-BbBbBbBbBbBbBbBbBbBbBbBbB
-cbcbcbcbcbcbcbcbcbcbcbcbc
+BbBbBbBbB
+cbcbcbcbc
 
 --------------------------------------------------------------------------------
--244.11764705882354 pt/round: E1(P1) "Betray"
--254.2016806722689 pt/round: E4(P4) "Use early history"
+-245.70552147239263 pt/round: E1(P1) "Betray"
+-253.06748466257667 pt/round: E4(P4) "Use early history"
 BbBbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 cbcbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 
-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+bbb
+bbb
 
 --------------------------------------------------------------------------------
--246.7289719626168 pt/round: E1(P1) "Betray"
--252.33644859813083 pt/round: E5(P5) "Collude 90% unless betrayed within last 10 rounds."
+-247.5 pt/round: E1(P1) "Betray"
+-251.78571428571428 pt/round: E5(P5) "Collude 90% unless betrayed within last 10 rounds."
 Bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 cbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 
-bbbbbbbbbbbbbbbbbbbbbbbbbbb
-bbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 
 --------------------------------------------------------------------------------
 -250.0 pt/round: E1(P1) "Betray"
@@ -395,8 +467,20 @@ bbbbbbbbbbbbbbbbbbbbbbbbbbb
 bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 
-bbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-bbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+bbb
+bbb
+
+--------------------------------------------------------------------------------
+-245.3020134228188 pt/round: E1(P1) "Betray"
+-253.35570469798657 pt/round: Rogers(P7) "Discriminating Altruism"
+BBbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+ccbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -407,59 +491,77 @@ Section 3 - Game Data for Team E2
 CBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCB
 CcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCc
 
-CBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCB
-CcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCc
+CBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCB
+CcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCc
+
+CBCBCBCB
+CcCcCcCc
 
 --------------------------------------------------------------------------------
--375.77639751552795 pt/round: E2(P2) "Alternate"
--73.91304347826087 pt/round: E1(P1) "Betray"
+-375.9259259259259 pt/round: E2(P2) "Alternate"
+-73.70370370370371 pt/round: E1(P1) "Betray"
 cbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcb
 BbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBb
 
-cbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcb
-BbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBb
+cbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbc
+BbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbB
 
 --------------------------------------------------------------------------------
--198.74213836477986 pt/round: E2(P2) "Alternate"
--198.74213836477986 pt/round: E3(P3) "Collude but retaliate"
-CBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcB
-CcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBc
-
-cBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBc
-BcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcB
-
---------------------------------------------------------------------------------
--198.95287958115182 pt/round: E2(P2) "Alternate"
--198.95287958115182 pt/round: E4(P4) "Use early history"
+-197.19101123595505 pt/round: E2(P2) "Alternate"
+-200.56179775280899 pt/round: E3(P3) "Collude but retaliate"
 CBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcB
 CcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBc
 
 cBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcB
 BcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBc
 
-cBcBcBcBcBcBcBcBcBcBcBcBcBcBcBc
-BcBcBcBcBcBcBcBcBcBcBcBcBcBcBcB
+cBcBcBcBcBcBcBcBcB
+BcBcBcBcBcBcBcBcBc
 
 --------------------------------------------------------------------------------
--369.54887218045116 pt/round: E2(P2) "Alternate"
--76.3157894736842 pt/round: E5(P5) "Collude 90% unless betrayed within last 10 rounds."
+-197.02380952380952 pt/round: E2(P2) "Alternate"
+-200.5952380952381 pt/round: E4(P4) "Use early history"
+CBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcB
+CcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBc
+
+cBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcB
+BcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBc
+
+cBcBcBcB
+BcBcBcBc
+
+--------------------------------------------------------------------------------
+-370.5729166666667 pt/round: E2(P2) "Alternate"
+-76.82291666666667 pt/round: E5(P5) "Collude 90% unless betrayed within last 10 rounds."
 CBcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcb
 CcBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBb
 
-cbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbc
-BbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbB
+cbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcb
+BbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBb
+
+cbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcb
+BbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBb
 
 --------------------------------------------------------------------------------
--127.5 pt/round: E2(P2) "Alternate"
--124.5 pt/round: Zacharie(P6) "Betray then Collude"
+-128.0487804878049 pt/round: E2(P2) "Alternate"
+-123.17073170731707 pt/round: Zacharie(P6) "Betray then Collude"
 cbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCb
 BbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCb
 
-CbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCb
-CbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCb
+CbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbC
+CbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbC
 
-CbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCb
-CbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCb
+--------------------------------------------------------------------------------
+47.76536312849162 pt/round: E2(P2) "Alternate"
+-247.20670391061452 pt/round: Rogers(P7) "Discriminating Altruism"
+CbCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCB
+CbCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCc
+
+CBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCB
+CcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCc
+
+CBCBCBCBCBCBCBCBCBC
+CcCcCcCcCcCcCcCcCcC
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -470,26 +572,32 @@ Section 3 - Game Data for Team E3
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 
 --------------------------------------------------------------------------------
--376.1904761904762 pt/round: E3(P3) "Collude but retaliate"
--73.33333333333333 pt/round: E1(P1) "Betray"
+-375.7396449704142 pt/round: E3(P3) "Collude but retaliate"
+-73.96449704142012 pt/round: E1(P1) "Betray"
 cbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcb
 BbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBb
 
-cbcbcbcbcbcbcbcbcbcbcbcbc
-BbBbBbBbBbBbBbBbBbBbBbBbB
+cbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcb
+BbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBb
+
+cbcbcbcbc
+BbBbBbBbB
 
 --------------------------------------------------------------------------------
--198.74213836477986 pt/round: E3(P3) "Collude but retaliate"
--198.74213836477986 pt/round: E2(P2) "Alternate"
+-200.56179775280899 pt/round: E3(P3) "Collude but retaliate"
+-197.19101123595505 pt/round: E2(P2) "Alternate"
 CcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBc
 CBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcB
 
-BcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcB
-cBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBc
+BcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBc
+cBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcB
+
+BcBcBcBcBcBcBcBcBc
+cBcBcBcBcBcBcBcBcB
 
 --------------------------------------------------------------------------------
 0.0 pt/round: E3(P3) "Collude but retaliate"
@@ -497,32 +605,41 @@ cBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBc
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 
 --------------------------------------------------------------------------------
--364.5 pt/round: E3(P3) "Collude but retaliate"
--73.5 pt/round: E5(P5) "Collude 90% unless betrayed within last 10 rounds."
-CCCCCcBcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbc
-CCCCCBcBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbB
+-373.1578947368421 pt/round: E3(P3) "Collude but retaliate"
+-76.3157894736842 pt/round: E5(P5) "Collude 90% unless betrayed within last 10 rounds."
+cBcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcb
+BcBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBb
 
-bcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbc
-bBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbB
+cbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcb
+BbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBb
 
-bcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbc
-bBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbB
+cbcbcbcbcbcbcbcbcbcbcbcbcbcbcb
+BbBbBbBbBbBbBbBbBbBbBbBbBbBbBb
 
 --------------------------------------------------------------------------------
--251.35135135135135 pt/round: E3(P3) "Collude but retaliate"
--50.270270270270274 pt/round: Zacharie(P6) "Betray then Collude"
+-251.25 pt/round: E3(P3) "Collude but retaliate"
+-50.25 pt/round: Zacharie(P6) "Betray then Collude"
 cbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcb
 BbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBb
 
 CcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCc
 CBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCB
 
-bCcbCcbCcbCcbCcbCcbCcbCcb
-bCBbCBbCBbCBbCBbCBbCBbCBb
+bCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcb
+bCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBb
+
+--------------------------------------------------------------------------------
+-2.7586206896551726 pt/round: E3(P3) "Collude but retaliate"
+-2.7586206896551726 pt/round: Rogers(P7) "Discriminating Altruism"
+CcBCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+CBcCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -533,29 +650,35 @@ Section 3 - Game Data for Team E4
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 
 --------------------------------------------------------------------------------
--254.2016806722689 pt/round: E4(P4) "Use early history"
--244.11764705882354 pt/round: E1(P1) "Betray"
+-253.06748466257667 pt/round: E4(P4) "Use early history"
+-245.70552147239263 pt/round: E1(P1) "Betray"
 cbcbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 BbBbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 
-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+bbb
+bbb
 
 --------------------------------------------------------------------------------
--198.95287958115182 pt/round: E4(P4) "Use early history"
--198.95287958115182 pt/round: E2(P2) "Alternate"
+-200.5952380952381 pt/round: E4(P4) "Use early history"
+-197.02380952380952 pt/round: E2(P2) "Alternate"
 CcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBc
 CBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcB
 
 BcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBc
 cBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcB
 
-BcBcBcBcBcBcBcBcBcBcBcBcBcBcBcB
-cBcBcBcBcBcBcBcBcBcBcBcBcBcBcBc
+BcBcBcBc
+cBcBcBcB
 
 --------------------------------------------------------------------------------
 0.0 pt/round: E4(P4) "Use early history"
@@ -563,92 +686,125 @@ cBcBcBcBcBcBcBcBcBcBcBcBcBcBcBc
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 
 --------------------------------------------------------------------------------
--253.10077519379846 pt/round: E4(P4) "Use early history"
--243.7984496124031 pt/round: E5(P5) "Collude 90% unless betrayed within last 10 rounds."
+-252.35294117647058 pt/round: E4(P4) "Use early history"
+-245.2941176470588 pt/round: E5(P5) "Collude 90% unless betrayed within last 10 rounds."
 cBcbcbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 BcBbBbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 
-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+bbbbbbbbbb
+bbbbbbbbbb
 
 --------------------------------------------------------------------------------
--219.20731707317074 pt/round: E4(P4) "Use early history"
--211.890243902439 pt/round: Zacharie(P6) "Betray then Collude"
+-217.3758865248227 pt/round: E4(P4) "Use early history"
+-213.12056737588654 pt/round: Zacharie(P6) "Betray then Collude"
 cbCcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcb
 BbCBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBb
 
-BcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBc
-cBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcB
+BcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbB
+cBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbc
 
-bBcb
-bcBb
+--------------------------------------------------------------------------------
+-2.0100502512562812 pt/round: E4(P4) "Use early history"
+-2.0100502512562812 pt/round: Rogers(P7) "Discriminating Altruism"
+CcBCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+CBcCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 Section 3 - Game Data for Team E5
 --------------------------------------------------------------------------------
-8.02919708029197 pt/round: E5(P5) "Collude 90% unless betrayed within last 10 rounds."
--40.14598540145985 pt/round: E0(P0) "Collude"
-CBCCBCCCBBCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCBCCCBCBCCBCCCBCCCCCCCCCCCCCCCCCCCCC
-CcCCcCCCccCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCcCCCcCcCCcCCCcCCCCCCCCCCCCCCCCCCCCC
+10.344827586206897 pt/round: E5(P5) "Collude 90% unless betrayed within last 10 rounds."
+-51.724137931034484 pt/round: E0(P0) "Collude"
+BCCCCCCCCCCCCCCCCCCCBCCCCCCCBCBCCCCCBCCCCCCCCCCCCCCCBCCCCCCCBCCCCBBCCCBCCCCCCCCC
+cCCCCCCCCCCCCCCCCCCCcCCCCCCCcCcCCCCCcCCCCCCCCCCCCCCCcCCCCCCCcCCCCccCCCcCCCCCCCCC
 
-CCCCBCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCBCCCCCCCCCCCCCCCCCCCCC
-CCCCcCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCcCCCCCCCCCCCCCCCCCCCCC
+CBCCCCCCCBCCBCCCCCCBCCCCCCCCCCCCCCBBCCCCCCCCCCCCCCCCCCCCCCCCCCCCCBCCCCCCCCCCCCCC
+CcCCCCCCCcCCcCCCCCCcCCCCCCCCCCCCCCccCCCCCCCCCCCCCCCCCCCCCCCCCCCCCcCCCCCCCCCCCCCC
+
+CCCCCCCCBCCCCC
+CCCCCCCCcCCCCC
 
 --------------------------------------------------------------------------------
--252.33644859813083 pt/round: E5(P5) "Collude 90% unless betrayed within last 10 rounds."
--246.7289719626168 pt/round: E1(P1) "Betray"
+-251.78571428571428 pt/round: E5(P5) "Collude 90% unless betrayed within last 10 rounds."
+-247.5 pt/round: E1(P1) "Betray"
 cbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 Bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 
-bbbbbbbbbbbbbbbbbbbbbbbbbbb
-bbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 
 --------------------------------------------------------------------------------
--76.3157894736842 pt/round: E5(P5) "Collude 90% unless betrayed within last 10 rounds."
--369.54887218045116 pt/round: E2(P2) "Alternate"
+-76.82291666666667 pt/round: E5(P5) "Collude 90% unless betrayed within last 10 rounds."
+-370.5729166666667 pt/round: E2(P2) "Alternate"
 CcBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBb
 CBcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcb
 
-BbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbB
-cbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbc
+BbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBb
+cbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcb
+
+BbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBb
+cbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcb
 
 --------------------------------------------------------------------------------
--73.5 pt/round: E5(P5) "Collude 90% unless betrayed within last 10 rounds."
--364.5 pt/round: E3(P3) "Collude but retaliate"
-CCCCCBcBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbB
-CCCCCcBcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbc
+-76.3157894736842 pt/round: E5(P5) "Collude 90% unless betrayed within last 10 rounds."
+-373.1578947368421 pt/round: E3(P3) "Collude but retaliate"
+BcBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBb
+cBcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcb
 
-bBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbB
-bcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbc
+BbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBb
+cbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcb
 
-bBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbBbB
-bcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbc
+BbBbBbBbBbBbBbBbBbBbBbBbBbBbBb
+cbcbcbcbcbcbcbcbcbcbcbcbcbcbcb
 
 --------------------------------------------------------------------------------
--243.7984496124031 pt/round: E5(P5) "Collude 90% unless betrayed within last 10 rounds."
--253.10077519379846 pt/round: E4(P4) "Use early history"
+-245.2941176470588 pt/round: E5(P5) "Collude 90% unless betrayed within last 10 rounds."
+-252.35294117647058 pt/round: E4(P4) "Use early history"
 BcBbBbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 cBcbcbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 
-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+bbbbbbbbbb
+bbbbbbbbbb
 
 --------------------------------------------------------------------------------
--249.4413407821229 pt/round: E5(P5) "Collude 90% unless betrayed within last 10 rounds."
--249.4413407821229 pt/round: Zacharie(P6) "Betray then Collude"
+-249.4949494949495 pt/round: E5(P5) "Collude 90% unless betrayed within last 10 rounds."
+-249.4949494949495 pt/round: Zacharie(P6) "Betray then Collude"
 cbBbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 Bbcbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 
 bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 
-bbbbbbbbbbbbbbbbbbb
-bbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+--------------------------------------------------------------------------------
+12.307692307692308 pt/round: E5(P5) "Collude 90% unless betrayed within last 10 rounds."
+-73.84615384615384 pt/round: Rogers(P7) "Discriminating Altruism"
+CcBBBBBBBBBBCCCCCCCCCCBCCCCCCCCBBCCBCCCCCCCCCCBCCCCCCCCBCCCCCCCCCCCCCBBCBCCCCCBC
+CBccccccccccCCCCCCCCCCcCCCCCCCCccCCcCCCCCCCCCCcCCCCCCCCcCCCCCCCCCCCCCccCcCCCCCcC
+
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCBCCCCCCCCCCBCCCCCCCCCCBCCBCCCCCCCCCCCCCCCCCBCCCBC
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCcCCCCCCCCCCcCCCCCCCCCCcCCcCCCCCCCCCCCCCCCCCcCCCcC
+
+BBCCCCCCCCCCCCCCCCBCCCCCCCCCCCCCCCC
+ccCCCCCCCCCCCCCCCCcCCCCCCCCCCCCCCCC
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -659,8 +815,11 @@ Section 3 - Game Data for Team Zacharie
 BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
-BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
-cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
+cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+
+BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
+cccccccccccccccccccccccccccccccccccccc
 
 --------------------------------------------------------------------------------
 -250.0 pt/round: Zacharie(P6) "Betray then Collude"
@@ -668,55 +827,136 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 
-bbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-bbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+bbb
+bbb
 
 --------------------------------------------------------------------------------
--124.5 pt/round: Zacharie(P6) "Betray then Collude"
--127.5 pt/round: E2(P2) "Alternate"
+-123.17073170731707 pt/round: Zacharie(P6) "Betray then Collude"
+-128.0487804878049 pt/round: E2(P2) "Alternate"
 BbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCb
 cbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCb
 
-CbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCb
-CbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCb
-
-CbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCb
-CbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCb
+CbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbC
+CbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbC
 
 --------------------------------------------------------------------------------
--50.270270270270274 pt/round: Zacharie(P6) "Betray then Collude"
--251.35135135135135 pt/round: E3(P3) "Collude but retaliate"
+-50.25 pt/round: Zacharie(P6) "Betray then Collude"
+-251.25 pt/round: E3(P3) "Collude but retaliate"
 BbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBb
 cbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcb
 
 CBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCB
 CcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCc
 
-bCBbCBbCBbCBbCBbCBbCBbCBb
-bCcbCcbCcbCcbCcbCcbCcbCcb
+bCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBbCBb
+bCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcbCcb
 
 --------------------------------------------------------------------------------
--211.890243902439 pt/round: Zacharie(P6) "Betray then Collude"
--219.20731707317074 pt/round: E4(P4) "Use early history"
+-213.12056737588654 pt/round: Zacharie(P6) "Betray then Collude"
+-217.3758865248227 pt/round: E4(P4) "Use early history"
 BbCBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBb
 cbCcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcb
 
-cBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcB
-BcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBc
-
-bcBb
-bBcb
+cBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbcBbc
+BcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbBcbB
 
 --------------------------------------------------------------------------------
--249.4413407821229 pt/round: Zacharie(P6) "Betray then Collude"
--249.4413407821229 pt/round: E5(P5) "Collude 90% unless betrayed within last 10 rounds."
+-249.4949494949495 pt/round: Zacharie(P6) "Betray then Collude"
+-249.4949494949495 pt/round: E5(P5) "Collude 90% unless betrayed within last 10 rounds."
 Bbcbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 cbBbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 
 bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 
-bbbbbbbbbbbbbbbbbbb
-bbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+--------------------------------------------------------------------------------
+-246.01769911504425 pt/round: Zacharie(P6) "Betray then Collude"
+-251.32743362831857 pt/round: Rogers(P7) "Discriminating Altruism"
+BBbcbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+ccbBbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+Section 3 - Game Data for Team Rogers
+--------------------------------------------------------------------------------
+0.7194244604316546 pt/round: Rogers(P7) "Discriminating Altruism"
+-3.597122302158273 pt/round: E0(P0) "Collude"
+CBCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+CcCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+
+--------------------------------------------------------------------------------
+-253.35570469798657 pt/round: Rogers(P7) "Discriminating Altruism"
+-245.3020134228188 pt/round: E1(P1) "Betray"
+ccbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+BBbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+--------------------------------------------------------------------------------
+-247.20670391061452 pt/round: Rogers(P7) "Discriminating Altruism"
+47.76536312849162 pt/round: E2(P2) "Alternate"
+CbCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCc
+CbCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCB
+
+CcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCc
+CBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCBCB
+
+CcCcCcCcCcCcCcCcCcC
+CBCBCBCBCBCBCBCBCBC
+
+--------------------------------------------------------------------------------
+-2.7586206896551726 pt/round: Rogers(P7) "Discriminating Altruism"
+-2.7586206896551726 pt/round: E3(P3) "Collude but retaliate"
+CBcCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+CcBCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+
+--------------------------------------------------------------------------------
+-2.0100502512562812 pt/round: Rogers(P7) "Discriminating Altruism"
+-2.0100502512562812 pt/round: E4(P4) "Use early history"
+CBcCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+CcBCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+
+--------------------------------------------------------------------------------
+-73.84615384615384 pt/round: Rogers(P7) "Discriminating Altruism"
+12.307692307692308 pt/round: E5(P5) "Collude 90% unless betrayed within last 10 rounds."
+CBccccccccccCCCCCCCCCCcCCCCCCCCccCCcCCCCCCCCCCcCCCCCCCCcCCCCCCCCCCCCCccCcCCCCCcC
+CcBBBBBBBBBBCCCCCCCCCCBCCCCCCCCBBCCBCCCCCCCCCCBCCCCCCCCBCCCCCCCCCCCCCBBCBCCCCCBC
+
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCcCCCCCCCCCCcCCCCCCCCCCcCCcCCCCCCCCCCCCCCCCCcCCCcC
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCBCCCCCCCCCCBCCCCCCCCCCBCCBCCCCCCCCCCCCCCCCCBCCCBC
+
+ccCCCCCCCCCCCCCCCCcCCCCCCCCCCCCCCCC
+BBCCCCCCCCCCCCCCCCBCCCCCCCCCCCCCCCC
+
+--------------------------------------------------------------------------------
+-251.32743362831857 pt/round: Rogers(P7) "Discriminating Altruism"
+-246.01769911504425 pt/round: Zacharie(P6) "Betray then Collude"
+ccbBbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+BBbcbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 
 --------------------------------------------------------------------------------
