@@ -8,7 +8,7 @@
 
 import random
 
-team_name = 'clayton'
+team_name = 'claytoon'
 strategy_name = 'nah'
 strategy_description = 'Collude at random unless betrayed'
 def move(my_history, their_history, my_score, their_score):
