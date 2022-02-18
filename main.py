@@ -39,9 +39,10 @@ import example3
 import example4
 import example5
 import mcmullen
+import clayton
 
 # Load players
-modules = [example0, example1, example2, example3, example4, example5, mcmullen]
+modules = [example0, example1, example2, example3, example4, example5, mcmullen, clayton]
 
 for module in modules:
     importlib.reload(module)
