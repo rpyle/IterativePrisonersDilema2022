@@ -7,7 +7,7 @@
 ####
 
 team_name = 'Rogers'
-strategy_name = 'Polka Dot'
+strategy_name = 'Backstab only if they do'
 strategy_description = 'Collude with everyone except for when last round they colluded and/or I betrayed.'
     
 def move(my_history, their_history, my_score, their_score):
